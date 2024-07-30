@@ -1,0 +1,57 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+sampling_rate = 44100
+duration = 2  # seconds
+t = np.linspace(0, duration, int(sampling_rate * duration * 3), endpoint=False)  # Adjusted length
+
+# Function to generate sine wave
+def generate_sine_wave(freq, harmonics):
+    signal = np.zeros_like(t)
+    for harmonic in harmonics:
+        signal += np.sin(2 * np.pi * freq * harmonic * t) / harmonic
+    return signal
+
+# Frequencies for D, E, and G
+freq_D = 293.5
+freq_E = 329.5
+freq_G = 392
+
+# Odd harmonics (3, 5, 7)
+odd_harmonics = [3, 5, 7]
+
+# Generate melody with odd harmonics
+melody_odd = np.concatenate([
+    generate_sine_wave(freq_D, odd_harmonics),
+    generate_sine_wave(freq_E, odd_harmonics),
+    generate_sine_wave(freq_G, odd_harmonics)
+])
+
+# Even harmonics (2, 4, 6)
+even_harmonics = [2, 4, 6]
+
+# Generate melody with even harmonics
+melody_even = np.concatenate([
+    generate_sine_wave(freq_D, even_harmonics),
+    generate_sine_wave(freq_E, even_harmonics),
+    generate_sine_wave(freq_G, even_harmonics)
+])
+
+# Plot the melodies
+plt.figure(figsize=(10, 6))
+
+plt.subplot(2, 1, 1)
+plt.title('Melody with Odd Harmonics')
+plt.plot(t[:len(melody_odd)], melody_odd, color='blue')  # Adjusted x-axis array
+plt.xlabel('Time')
+plt.ylabel('Amplitude')
+
+plt.subplot(2, 1, 2)
+plt.title('Melody with Even Harmonics')
+plt.plot(t[:len(melody_even)], melody_even, color='red')  # Adjusted x-axis array
+plt.xlabel('Time')
+plt.ylabel('Amplitude')
+
+plt.tight_layout()
+plt.show()
